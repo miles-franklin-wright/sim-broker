@@ -81,3 +81,22 @@ This module simulates the execution of orders into trades. It supports:
 ### Usage:
 - **fill_orders(orders, current_prices, seed):**  
   Processes a batch of orders given a current prices mapping (symbol → mid price) and returns a list of filled trade records.
+
+## US Desk (`sim_broker.desks.us_desk`)
+
+The `USDesk` class models an agency trading desk that:
+
+| Method | Purpose |
+|--------|---------|
+| `process_trade(trade)` | Updates cash and positions for every filled trade. |
+| `snapshot(mark_prices)` | Returns a dict with cash, realised / unrealised P&L, total P&L, gross exposure, and position count. |
+| `reset_day()` | Clears positions and cash (handy for simulations that loop many days). |
+
+**Position logic**
+
+- **BUY:** shares increase, cash decreases by `price * qty`.  
+- **SELL:** shares decrease, cash increases by `price * qty`, realised P&L recognised.  
+- **Fee:** always deducted from cash.
+
+Unrealised P&L = ∑ (mark − cost_basis) × shares.  
+Realised P&L accumulates when shares are sold.

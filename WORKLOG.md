@@ -19,3 +19,4 @@
 - Implemented Fill Engine (`sim_broker/execution/fill_engine.py`)
   - Supports market and limit orders with slippage and fee calculation.
 - Added unit tests for the fill engine.
+- Added US agency desk (`sim_broker/desks/us_desk.py`) with position & P&L tracking.
