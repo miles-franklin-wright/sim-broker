@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: sim-broker
+Version: 0.0.1
+Summary: Simulated broker-dealer environment
+Author: Miles Wright
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: pydantic
+Requires-Dist: rich

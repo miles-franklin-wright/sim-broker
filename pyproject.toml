@@ -1,0 +1,22 @@
+[project]
+name = "sim-broker"
+version = "0.0.1"
+description = "Simulated broker-dealer environment"
+authors = [{ name = "Miles Wright" }]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "pydantic",
+    "rich"
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+# tell setuptools exactly which package(s) to include
+[tool.setuptools]
+packages = ["sim_broker"]

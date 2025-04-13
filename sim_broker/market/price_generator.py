@@ -54,19 +54,20 @@ def generate_prices(
     start_dt = (
         datetime.strptime(date, "%Y-%m-%d") if isinstance(date, str) else date
     ).replace(hour=9, minute=30, second=0, microsecond=0)
-    index = pd.date_range(start=start_dt, periods=minutes, freq="T")
+    index = pd.date_range(start=start_dt, periods=minutes, freq="min")
 
     dt = 1 / (252 * minutes)  # 1 trading year ≈ 252 days
     sigma_sqrt_dt = vol * np.sqrt(dt)
 
     n_sym = len(symbols)
-    # ε ~ N(0,1)   ->  log‑return r = σ√Δt * ε
-    eps = rng.standard_normal(size=(minutes, n_sym))
+    # draw returns for *minutes‑1* intervals (09:31 onward)
+    eps = rng.standard_normal(size=(minutes - 1, n_sym))
     log_returns = sigma_sqrt_dt * eps
+    cum_log = np.vstack([np.zeros((1, n_sym)), np.cumsum(log_returns, axis=0)])
 
-    # cumulative log returns; prepend zeros so first price = start_price
-    log_price = np.vstack([np.zeros((1, n_sym)), np.cumsum(log_returns, axis=0)])
-    prices = start_price * np.exp(log_price[1:])  # drop prepended row
+    prices = start_price * np.exp(cum_log)  # now has 'minutes' rows
+
+
 
     df = pd.DataFrame(prices, index=index, columns=symbols)
     return df
