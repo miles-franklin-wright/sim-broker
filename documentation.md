@@ -100,3 +100,19 @@ The `USDesk` class models an agency trading desk that:
 
 Unrealised P&L = ∑ (mark − cost_basis) × shares.  
 Realised P&L accumulates when shares are sold.
+
+
+## Writer (`sim_broker.output.writer`)
+
+### write_day(...)
+
+| Arg | Type | Purpose |
+|-----|------|---------|
+| `out_root` | str/Path | Base folder (e.g., `"out"`). |
+| `trade_date` | str | `"YYYY-MM-DD"` sub‑folder name. |
+| `orders`, `trades` | list[dict] | Written as JSONL (`orders.jsonl`, `trades.jsonl`). |
+| `positions_df`, `pnl_df` | pandas.DataFrame | Written as CSV (`positions.csv`, `pnl.csv`). |
+| `seed` | int/None | Stored in `meta.json` for reproducibility. |
+| `overwrite` | bool | If `False`, raises if directory exists. |
+
+`meta.json` also records row counts, package version, and UTC write‑timestamp.

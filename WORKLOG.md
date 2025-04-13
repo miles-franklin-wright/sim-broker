@@ -20,3 +20,4 @@
   - Supports market and limit orders with slippage and fee calculation.
 - Added unit tests for the fill engine.
 - Added US agency desk (`sim_broker/desks/us_desk.py`) with position & P&L tracking.
+- Implemented Writer utility (`sim_broker/output/writer.py`) for daily file output.
