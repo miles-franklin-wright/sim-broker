@@ -21,3 +21,13 @@ with ε ~ 𝒩(0, 1) and Δt = 1 / (252·minutes).
 - Symbol‑specific volatilities  
 - Overnight gap handling
 
+## Client Generator (`sim_broker.clients.segments`)
+
+The function `create_clients(cfg, seed)` produces a DataFrame where each row represents a synthetic client. The key columns are:
+
+- **client_id:** A UUID generated in a deterministic manner. This is achieved by combining two 64‑bit random numbers into a single 128‑bit integer.
+- **segment:** The client segment (e.g., "long_only", "active").
+- **orders_per_day:** Mean number of orders per day (used later to simulate order arrivals).
+- **size_mu & size_sigma:** Parameters for the log‑normal distribution governing order size.
+
+Segment parameters are provided in the configuration (`config/clients.yml`) and can be tuned without modifying code.
