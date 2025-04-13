@@ -31,3 +31,32 @@ The function `create_clients(cfg, seed)` produces a DataFrame where each row rep
 - **size_mu & size_sigma:** Parameters for the log‑normal distribution governing order size.
 
 Segment parameters are provided in the configuration (`config/clients.yml`) and can be tuned without modifying code.
+
+
+## Order Generator (`sim_broker.execution.order_generator`)
+
+This module generates simulated orders for a given trading day by sampling from a set of client profiles.
+
+### Inputs:
+- **clients:** DataFrame with client records (from the client generator). Key columns:
+  - `client_id`
+  - `orders_per_day`
+  - `size_mu` and `size_sigma`
+- **symbols:** A list of trading symbols (tickers).
+- **trading_date:** The trading date (e.g., "2025-01-02"), assumed to start at 09:30.
+- **seed:** RNG seed for reproducibility.
+
+### Output:
+A list of order dictionaries with fields:
+- `order_id`: Deterministic UUID (generated using RNG to ensure reproducibility).
+- `client_id`: Inherited from the client record.
+- `desk_id`: Currently fixed as "US_AGENCY".
+- `symbol`: Randomly chosen ticker.
+- `side`: "BUY" or "SELL" (50/50 chance).
+- `order_type`: "MKT" for market orders (80%) or "LMT" for limit orders (20%).
+- `limit_px`: For limit orders, a slightly adjusted price; `None` for market orders.
+- `qty`: Quantity, sampled from a log-normal distribution.
+- `ts_created`: A timestamp for order creation, randomly distributed throughout the trading session.
+
+The module allows deterministic order generation by seeding the RNG, ensuring consistent simulation outputs.
+

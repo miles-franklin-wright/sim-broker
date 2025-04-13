@@ -10,8 +10,9 @@
   - Generates 1‑minute GBM price paths for any symbol list
   - Deterministic via seed
 - Added unit tests `test_price_generator.py` (shape & determinism)
-## 2025‑04‑13
 - Updated client generator in `sim_broker/clients/segments.py`
   - Implemented deterministic UUID generation by combining two 64‑bit integers.
 - Added corresponding unit tests.
-
+- Implemented Order Generator module (`sim_broker/execution/order_generator.py`)
+  - Now uses deterministic order IDs for reproducibility.
+- Added unit tests for Order Generator.
