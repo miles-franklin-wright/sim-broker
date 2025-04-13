@@ -16,3 +16,6 @@
 - Implemented Order Generator module (`sim_broker/execution/order_generator.py`)
   - Now uses deterministic order IDs for reproducibility.
 - Added unit tests for Order Generator.
+- Implemented Fill Engine (`sim_broker/execution/fill_engine.py`)
+  - Supports market and limit orders with slippage and fee calculation.
+- Added unit tests for the fill engine.

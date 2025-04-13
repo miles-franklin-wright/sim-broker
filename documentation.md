@@ -60,3 +60,24 @@ A list of order dictionaries with fields:
 
 The module allows deterministic order generation by seeding the RNG, ensuring consistent simulation outputs.
 
+## Fill Engine (`sim_broker.execution.fill_engine`)
+
+This module simulates the execution of orders into trades. It supports:
+
+- **Market Orders (MKT):**  
+  These orders fill immediately at the current mid price modified by a small random slippage drawn from a Normal distribution (mean 0, standard deviation 0.0005).
+
+- **Limit Orders (LMT):**  
+  A BUY limit order fills if the order's limit price is greater than or equal to the mid price, while a SELL limit order fills if the limit price is less than or equal to the mid price. If the condition is not met, the order remains unfilled.
+
+### Trade Record Structure:
+- **trade_id:** A unique identifier generated via `uuid.uuid4()`.
+- **order_id:** The original order's ID.
+- **desk_id:** The desk handling the order.
+- **symbol, side, qty_exec, px_exec:** Trading details.
+- **fee:** Commission calculated per share with a minimum fee.
+- **ts_exec:** Execution timestamp (taken from the order's creation time).
+
+### Usage:
+- **fill_orders(orders, current_prices, seed):**  
+  Processes a batch of orders given a current prices mapping (symbol → mid price) and returns a list of filled trade records.
