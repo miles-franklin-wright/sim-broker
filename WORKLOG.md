@@ -6,3 +6,7 @@
 - Installed base dependencies (numpy, pandas, pydantic, etc.)
 - Created project file structure (initial)
 - Started working on initial market data and client simulation
+- - Implemented `market/price_generator.py`
+  - Generates 1‑minute GBM price paths for any symbol list
+  - Deterministic via seed
+- Added unit tests `test_price_generator.py` (shape & determinism)
