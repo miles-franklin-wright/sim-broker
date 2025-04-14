@@ -21,3 +21,4 @@
 - Added unit tests for the fill engine.
 - Added US agency desk (`sim_broker/desks/us_desk.py`) with position & P&L tracking.
 - Implemented Writer utility (`sim_broker/output/writer.py`) for daily file output.
+- Added CLI (`sim_broker/cli.py`) that orchestrates Sprint‑0 pipeline and writes outputs.

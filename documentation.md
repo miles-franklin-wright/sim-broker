@@ -116,3 +116,21 @@ Realised P&L accumulates when shares are sold.
 | `overwrite` | bool | If `False`, raises if directory exists. |
 
 `meta.json` also records row counts, package version, and UTC write‑timestamp.
+
+
+## Command‑Line Runner (`sim_broker.cli`)
+
+Run a full day end‑to‑end:
+
+```bash
+python -m sim_broker.cli 2025-01-02 --seed 42 --out out --overwrite
+```
+
+Flag	Default	Meaning
+trade_date	—	Trading date (YYYY‑MM‑DD)
+--seed	None	RNG seed for deterministic runs
+--out	out	Root output folder
+--overwrite	off	Replace day folder if it exists
+
+Outputs are written under <out>/<trade_date>/ and a Rich summary is printed to the terminal.
+
