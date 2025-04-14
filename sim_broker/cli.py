@@ -26,7 +26,7 @@ from sim_broker.execution.order_generator import create_orders
 from sim_broker.execution.fill_engine import fill_orders
 from sim_broker.desks.us_desk import USDesk
 from sim_broker.output.writer import write_day
-from sim_broker.config import cfg
+from sim_broker.config import cfg as sim_cfg
 
 console = Console()
 
@@ -41,16 +41,20 @@ def generate_day(
     rng = np.random.default_rng(seed)
 
     # 1. Generate price paths (use first row as mid prices for order gen/fill).
+    n_symbols = sim_cfg.market.n_symbols
     symbols = [f"S{i:03d}" for i in range(n_symbols)]
-    prices_df = generate_prices(trade_date, symbols, seed=seed)
+    prices_df = generate_prices(
+        trade_date,
+        symbols,
+        seed=seed,
+        start_price=sim_cfg.market.start_price,
+        annual_vol=sim_cfg.market.volatility,
+    )
     mid_prices = prices_df.iloc[0].to_dict()
 
     # 2. Create clients.
-    cfg = {
-        "long_only": {"count": 1500, "mean_orders_per_day": 0.3, "size_mu": 11, "size_sigma": 0.4},
-        "active": {"count": 500, "mean_orders_per_day": 2.0, "size_mu": 9, "size_sigma": 0.6},
-    }
-    clients_df = create_clients(cfg, seed=seed)
+
+    clients_df = create_clients(sim_cfg.clients.model_dump(), seed=seed)
 
     # 3. Generate orders.
     orders = create_orders(clients_df, symbols, trade_date, seed=seed)
@@ -109,9 +113,14 @@ def _parse_args():
     p = argparse.ArgumentParser(description="Run one simulated trading day.")
     p.add_argument("trade_date", help="YYYY-MM-DD")
     p.add_argument("--seed", type=int, default=None, help="RNG seed")
-    p.add_argument("--out", default=cfg.paths.output_dir, help=f"root output directory (default {cfg.paths.output_dir})")
+    p.add_argument(
+        "--out",
+        default=sim_cfg.paths.output_dir,
+        help=f"root output directory (default {sim_cfg.paths.output_dir})"
+    )
     p.add_argument("--overwrite", action="store_true", help="overwrite existing day folder")
     return p.parse_args()
+
 
 
 def main():
