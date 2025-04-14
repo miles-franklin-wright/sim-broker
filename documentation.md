@@ -134,3 +134,22 @@ trade_date	—	Trading date (YYYY‑MM‑DD)
 
 Outputs are written under <out>/<trade_date>/ and a Rich summary is printed to the terminal.
 
+
+## Configuration
+
+`sim_broker.config` loads `config/base.yml` into an immutable object `cfg`.
+
+```python
+from sim_broker.config import cfg
+
+out_dir = cfg.paths.output_dir      # "C:/SimBrokerData"
+seed    = cfg.random.seed           # 42
+n_sym   = cfg.market.n_symbols      # 100
+
+Output directory precedence
+
+    --out /custom/path (CLI flag)
+
+    SIM_BROKER_OUTDIR=/custom/path (environment variable)
+
+    paths.output_dir in YAML (config/base.yml)

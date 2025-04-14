@@ -10,8 +10,10 @@ dependencies = [
     "numpy",
     "pandas",
     "pydantic",
-    "rich"
+    "rich",
+    "PyYAML",
 ]
+
 
 [build-system]
 requires = ["setuptools>=61"]

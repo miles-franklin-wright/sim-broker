@@ -26,6 +26,7 @@ from sim_broker.execution.order_generator import create_orders
 from sim_broker.execution.fill_engine import fill_orders
 from sim_broker.desks.us_desk import USDesk
 from sim_broker.output.writer import write_day
+from sim_broker.config import cfg
 
 console = Console()
 
@@ -108,7 +109,7 @@ def _parse_args():
     p = argparse.ArgumentParser(description="Run one simulated trading day.")
     p.add_argument("trade_date", help="YYYY-MM-DD")
     p.add_argument("--seed", type=int, default=None, help="RNG seed")
-    p.add_argument("--out", default="out", help="root output directory")
+    p.add_argument("--out", default=cfg.paths.output_dir, help=f"root output directory (default {cfg.paths.output_dir})")
     p.add_argument("--overwrite", action="store_true", help="overwrite existing day folder")
     return p.parse_args()
 
