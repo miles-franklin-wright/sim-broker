@@ -23,3 +23,4 @@
 - Implemented Writer utility (`sim_broker/output/writer.py`) for daily file output.
 - Added CLI (`sim_broker/cli.py`) that orchestrates Sprint‑0 pipeline and writes outputs.
 - Introduced YAML config + env/CLI override for output directory.
+- Added system‑level tests: determinism, seed variation, writer idempotence.

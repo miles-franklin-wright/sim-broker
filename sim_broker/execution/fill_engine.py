@@ -85,7 +85,9 @@ def fill_order(order: Dict[str, Any], mid_price: float, rng: np.random.Generator
     fee = max(COMMISSION_PER_SHARE * qty, MIN_COMMISSION)
 
     trade = {
-        "trade_id": str(uuid.uuid4()),
+        "trade_id": str(uuid.UUID(int=(int(rng.integers(0, 1 << 64, dtype=np.uint64)) << 64)
+                                      | int(rng.integers(0, 1 << 64, dtype=np.uint64)))),
+
         "order_id": order.get("order_id"),
         "desk_id": order.get("desk_id"),
         "symbol": order.get("symbol"),

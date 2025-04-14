@@ -153,3 +153,4 @@ Output directory precedence
     SIM_BROKER_OUTDIR=/custom/path (environment variable)
 
     paths.output_dir in YAML (config/base.yml)
+
