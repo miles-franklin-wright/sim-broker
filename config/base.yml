@@ -1,0 +1,25 @@
+# ---------- default simulation parameters ----------
+random:
+  seed: 42
+
+paths:
+  # Store data OUTSIDE the repository by default
+  output_dir: "C:\\Users\\miles\\Documents\\Business\\Personal Projects\\DATA dump\\Simulated Broker Dealer"        # <-- change for macOS/Linux if needed
+
+
+market:
+  n_symbols: 500
+  start_price: 100.0
+  volatility: 0.10
+
+clients:
+  long_only:
+    count: 1500
+    mean_orders_per_day: 0.05
+    size_mu: 6       # ≈ 400 shares
+    size_sigma: 0.8
+  active:
+    count: 500
+    mean_orders_per_day: 0.5
+    size_mu: 5       # ≈ 150 shares
+    size_sigma: 1.0
