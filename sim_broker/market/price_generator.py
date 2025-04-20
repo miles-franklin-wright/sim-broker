@@ -10,7 +10,7 @@ realistic model later.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Sequence
 
 import numpy as np
@@ -46,8 +46,8 @@ def generate_prices(
     Returns
     -------
     DataFrame
-        Index → DatetimeIndex at 1‑min frequency  
-        Columns → symbols  
+        Index → DatetimeIndex at 1‑min frequency
+        Columns → symbols
         Values → mid prices (float64)
     """
     rng = np.random.default_rng(seed)

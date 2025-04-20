@@ -14,7 +14,6 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 from rich import box
 from rich.console import Console
@@ -38,7 +37,6 @@ def generate_day(
     overwrite: bool = False,
     n_symbols: int = 100,
 ):
-    rng = np.random.default_rng(seed)
 
     # 1. Generate price paths (use first row as mid prices for order gen/fill).
     n_symbols = sim_cfg.market.n_symbols
@@ -116,11 +114,12 @@ def _parse_args():
     p.add_argument(
         "--out",
         default=sim_cfg.paths.output_dir,
-        help=f"root output directory (default {sim_cfg.paths.output_dir})"
+        help=f"root output directory (default {sim_cfg.paths.output_dir})",
     )
-    p.add_argument("--overwrite", action="store_true", help="overwrite existing day folder")
+    p.add_argument(
+        "--overwrite", action="store_true", help="overwrite existing day folder"
+    )
     return p.parse_args()
-
 
 
 def main():

@@ -1,7 +1,9 @@
-import subprocess, sys, json, tempfile, shutil
-from pathlib import Path
+import subprocess
+import sys
+import json
 
 from sim_broker.cli import generate_day
+
 
 def test_generate_day_function(tmp_path):
     # Call the internal function (faster than spawning a subprocess)
@@ -10,13 +12,14 @@ def test_generate_day_function(tmp_path):
         seed=123,
         out_root=tmp_path,
         overwrite=False,
-        n_symbols=10,   # small for test speed
+        n_symbols=10,  # small for test speed
     )
     # Check meta.json exists and seed is correct
     meta = json.loads((day_dir / "meta.json").read_text())
     assert meta["seed"] == 123
     assert meta["rows"]["orders"] > 0
     assert meta["rows"]["trades"] > 0
+
 
 def test_cli_subprocess(tmp_path):
     # Spawn the CLI as a subprocess to ensure entry‑point works

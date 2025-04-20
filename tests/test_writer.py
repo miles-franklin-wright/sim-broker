@@ -1,9 +1,9 @@
-from pathlib import Path
 import json
 import pandas as pd
 import tempfile
 
 from sim_broker.output.writer import write_day
+
 
 def make_dummy():
     orders = [{"order_id": "o1"}, {"order_id": "o2"}]
@@ -12,12 +12,19 @@ def make_dummy():
     pnl = pd.DataFrame({"desk_id": ["US_AGENCY"], "realised_pnl": [120.0]})
     return orders, trades, positions, pnl
 
+
 def test_write_day_creates_files():
     orders, trades, positions, pnl = make_dummy()
     with tempfile.TemporaryDirectory() as tmp:
         day_dir = write_day(tmp, "2025-01-02", orders, trades, positions, pnl, seed=42)
         # Check files exist
-        expected = ["orders.jsonl", "trades.jsonl", "positions.csv", "pnl.csv", "meta.json"]
+        expected = [
+            "orders.jsonl",
+            "trades.jsonl",
+            "positions.csv",
+            "pnl.csv",
+            "meta.json",
+        ]
         for fname in expected:
             assert (day_dir / fname).exists()
 
@@ -27,6 +34,7 @@ def test_write_day_creates_files():
         assert meta["rows"]["trades"] == 3
         assert meta["seed"] == 42
 
+
 def test_overwrite_flag():
     orders, trades, positions, pnl = make_dummy()
     with tempfile.TemporaryDirectory() as tmp:
@@ -34,7 +42,19 @@ def test_overwrite_flag():
         write_day(tmp, "2025-01-02", orders, trades, positions, pnl, seed=None)
         # Second write without overwrite should raise
         import pytest
+
         with pytest.raises(FileExistsError):
-            write_day(tmp, "2025-01-02", orders, trades, positions, pnl, seed=None, overwrite=False)
+            write_day(
+                tmp,
+                "2025-01-02",
+                orders,
+                trades,
+                positions,
+                pnl,
+                seed=None,
+                overwrite=False,
+            )
         # With overwrite=True should succeed
-        write_day(tmp, "2025-01-02", orders, trades, positions, pnl, seed=None, overwrite=True)
+        write_day(
+            tmp, "2025-01-02", orders, trades, positions, pnl, seed=None, overwrite=True
+        )

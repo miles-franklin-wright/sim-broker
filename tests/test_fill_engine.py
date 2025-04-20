@@ -1,9 +1,6 @@
 import math
-from datetime import datetime
 
 import numpy as np
-import pandas as pd
-import pytest
 from sim_broker.execution.fill_engine import fill_order, fill_orders
 
 # Define some sample orders to test our fill engine:
@@ -14,7 +11,7 @@ ORDER_MKT_BUY = {
     "side": "BUY",
     "order_type": "MKT",
     "qty": 100,
-    "ts_created": "2025-01-02T09:31:00"
+    "ts_created": "2025-01-02T09:31:00",
 }
 
 ORDER_LMT_BUY_FILL = {
@@ -25,7 +22,7 @@ ORDER_LMT_BUY_FILL = {
     "order_type": "LMT",
     "limit_px": 101.0,  # Should fill if mid price (100.0) <= limit
     "qty": 50,
-    "ts_created": "2025-01-02T09:32:00"
+    "ts_created": "2025-01-02T09:32:00",
 }
 
 ORDER_LMT_BUY_NOFILL = {
@@ -34,9 +31,9 @@ ORDER_LMT_BUY_NOFILL = {
     "symbol": "AAPL",
     "side": "BUY",
     "order_type": "LMT",
-    "limit_px": 99.0,   # Should NOT fill if mid price (100.0) > limit
+    "limit_px": 99.0,  # Should NOT fill if mid price (100.0) > limit
     "qty": 50,
-    "ts_created": "2025-01-02T09:33:00"
+    "ts_created": "2025-01-02T09:33:00",
 }
 
 ORDER_LMT_SELL_FILL = {
@@ -45,9 +42,9 @@ ORDER_LMT_SELL_FILL = {
     "symbol": "AAPL",
     "side": "SELL",
     "order_type": "LMT",
-    "limit_px": 99.0,   # Should fill if mid price (100.0) >= limit
+    "limit_px": 99.0,  # Should fill if mid price (100.0) >= limit
     "qty": 75,
-    "ts_created": "2025-01-02T09:34:00"
+    "ts_created": "2025-01-02T09:34:00",
 }
 
 ORDER_LMT_SELL_NOFILL = {
@@ -58,7 +55,7 @@ ORDER_LMT_SELL_NOFILL = {
     "order_type": "LMT",
     "limit_px": 101.0,  # Should NOT fill if mid price (100.0) < limit
     "qty": 75,
-    "ts_created": "2025-01-02T09:35:00"
+    "ts_created": "2025-01-02T09:35:00",
 }
 
 
@@ -119,7 +116,17 @@ def test_fill_orders_batch():
     # Expect three orders to fill: the market order, the BUY limit that qualifies, and the SELL limit that qualifies.
     assert len(trades) == 3
     # Ensure each trade has the expected keys.
-    expected_keys = ["trade_id", "order_id", "desk_id", "symbol", "side", "qty_exec", "px_exec", "fee", "ts_exec"]
+    expected_keys = [
+        "trade_id",
+        "order_id",
+        "desk_id",
+        "symbol",
+        "side",
+        "qty_exec",
+        "px_exec",
+        "fee",
+        "ts_exec",
+    ]
     for trade in trades:
         for key in expected_keys:
             assert key in trade

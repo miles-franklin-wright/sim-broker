@@ -15,7 +15,6 @@ out/
 
 from __future__ import annotations
 import json
-import csv
 from pathlib import Path
 from typing import List, Dict, Any, Union
 from datetime import datetime, timezone
@@ -27,7 +26,9 @@ import sim_broker  # for version string
 def _ensure_dir(path: Path, overwrite: bool):
     if path.exists():
         if not overwrite:
-            raise FileExistsError(f"{path} already exists (use overwrite=True to replace)")
+            raise FileExistsError(
+                f"{path} already exists (use overwrite=True to replace)"
+            )
     else:
         path.mkdir(parents=True, exist_ok=True)
 

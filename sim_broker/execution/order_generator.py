@@ -97,7 +97,7 @@ def create_orders(
                     limit_px = DEFAULT_REFERENCE_PRICE * (1 + abs(adjustment))
                 else:
                     limit_px = DEFAULT_REFERENCE_PRICE * (1 - abs(adjustment))
-            
+
             order = {
                 "order_id": order_id,
                 "client_id": client_id,

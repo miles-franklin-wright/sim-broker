@@ -8,7 +8,7 @@ Order Types:
  - Limit orders (LMT): Execute if the limit condition is satisfied:
       • For BUY orders: fill if limit_px >= current mid price.
       • For SELL orders: fill if limit_px <= current mid price.
-      
+
 Assumptions for Sprint 0:
  - All fills are full (no partial fills).
  - Fee is computed based on a per-share commission rate.
@@ -24,12 +24,15 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 
 # Constants for simulation
-SLIPPAGE_MEAN = 0.0             # no directional bias
-SLIPPAGE_STD = 0.0005           # typical slippage: 0.05%
-COMMISSION_PER_SHARE = 0.0025   # USD commission per share
-MIN_COMMISSION = 1.0            # minimum commission fee in USD
+SLIPPAGE_MEAN = 0.0  # no directional bias
+SLIPPAGE_STD = 0.0005  # typical slippage: 0.05%
+COMMISSION_PER_SHARE = 0.0025  # USD commission per share
+MIN_COMMISSION = 1.0  # minimum commission fee in USD
 
-def fill_order(order: Dict[str, Any], mid_price: float, rng: np.random.Generator) -> Optional[Dict[str, Any]]:
+
+def fill_order(
+    order: Dict[str, Any], mid_price: float, rng: np.random.Generator
+) -> Optional[Dict[str, Any]]:
     """
     Process a single order and return a trade record if the order is filled.
 
@@ -85,9 +88,12 @@ def fill_order(order: Dict[str, Any], mid_price: float, rng: np.random.Generator
     fee = max(COMMISSION_PER_SHARE * qty, MIN_COMMISSION)
 
     trade = {
-        "trade_id": str(uuid.UUID(int=(int(rng.integers(0, 1 << 64, dtype=np.uint64)) << 64)
-                                      | int(rng.integers(0, 1 << 64, dtype=np.uint64)))),
-
+        "trade_id": str(
+            uuid.UUID(
+                int=(int(rng.integers(0, 1 << 64, dtype=np.uint64)) << 64)
+                | int(rng.integers(0, 1 << 64, dtype=np.uint64))
+            )
+        ),
         "order_id": order.get("order_id"),
         "desk_id": order.get("desk_id"),
         "symbol": order.get("symbol"),
@@ -100,10 +106,14 @@ def fill_order(order: Dict[str, Any], mid_price: float, rng: np.random.Generator
     return trade
 
 
-def fill_orders(orders: List[Dict[str, Any]], current_prices: Dict[str, float], seed: int | None = None) -> List[Dict[str, Any]]:
+def fill_orders(
+    orders: List[Dict[str, Any]],
+    current_prices: Dict[str, float],
+    seed: int | None = None,
+) -> List[Dict[str, Any]]:
     """
     Process a list of orders with the current mid prices for their symbols.
-    
+
     Parameters
     ----------
     orders : list of dict
@@ -112,7 +122,7 @@ def fill_orders(orders: List[Dict[str, Any]], current_prices: Dict[str, float], 
         Mapping of symbol → current mid price.
     seed : int or None
         RNG seed to ensure deterministic behavior.
-    
+
     Returns
     -------
     trades : list of dict

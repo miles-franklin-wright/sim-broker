@@ -8,18 +8,21 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, Any
 
+
 @dataclass
 class Position:
     shares: int = 0
-    cost_basis: float = 0.0      # VWAP of current position
-    realised_pnl: float = 0.0    # realised P&L accumulated today
+    cost_basis: float = 0.0  # VWAP of current position
+    realised_pnl: float = 0.0  # realised P&L accumulated today
 
     def update(self, side: str, qty: int, price: float):
         """Update position and realised P&L after a trade."""
         if side == "BUY":
             new_shares = self.shares + qty
             if new_shares:  # avoid division by zero
-                self.cost_basis = (self.cost_basis * self.shares + price * qty) / new_shares
+                self.cost_basis = (
+                    self.cost_basis * self.shares + price * qty
+                ) / new_shares
             self.shares = new_shares
         else:  # SELL
             realised = (price - self.cost_basis) * qty
@@ -27,6 +30,7 @@ class Position:
             self.shares -= qty
             if self.shares == 0:
                 self.cost_basis = 0.0
+
 
 @dataclass
 class USDesk:

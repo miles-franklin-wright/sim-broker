@@ -2,7 +2,12 @@ import pandas as pd
 from sim_broker.clients.segments import create_clients
 
 cfg = {
-    "long_only": {"count": 3, "mean_orders_per_day": 0.3, "size_mu": 11, "size_sigma": 0.4},
+    "long_only": {
+        "count": 3,
+        "mean_orders_per_day": 0.3,
+        "size_mu": 11,
+        "size_sigma": 0.4,
+    },
     "active": {"count": 2, "mean_orders_per_day": 2.0, "size_mu": 9, "size_sigma": 0.6},
 }
 

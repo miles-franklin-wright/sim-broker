@@ -1,0 +1,16 @@
+# .pre-commit-config.yaml
+
+repos:
+  - repo: https://github.com/psf/black
+    rev: 25.1.0                # match the Black version you want
+    hooks:
+      - id: black              # runs the Black formatter
+        language_version: python3
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.11.6              # match the Ruff version you want
+    hooks:
+      - id: ruff               # runs the Ruff linter
+        args:                  # extra args; here we auto‑fix fixable issues
+          - --fix
+        language_version: python3
