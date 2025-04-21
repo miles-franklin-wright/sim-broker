@@ -12,6 +12,7 @@ dependencies = [
     "pydantic",
     "rich",
     "PyYAML",
+    "kafka-python (>=2.1.5,<3.0.0)",
 ]
 
 
@@ -22,3 +23,13 @@ build-backend = "setuptools.build_meta"
 # tell setuptools exactly which package(s) to include
 [tool.setuptools]
 packages = ["sim_broker"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [
+  ".venv",
+  "infra",
+  "lake",
+  "pgdata",
+  "sim_broker.egg-info",
+]

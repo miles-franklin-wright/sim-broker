@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+  redpanda:
+    image: redpandadata/redpanda:latest
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+    volumes:
+      - ../lake:/lake
+
+  # optional: ensure heartbeat topic exists before producers/consumers start
+  topic_init:
+    image: redpandadata/redpanda:latest
+    depends_on: [redpanda]
+    entrypoint:
+      - sh
+      - -c
+      - |
+        # wait for broker to be up
+        until rpk cluster health --brokers redpanda:9092; do
+          echo "waiting for redpanda…"; sleep 1
+        done
+        rpk topic create heartbeat --brokers redpanda:9092 || true
+    # no ports or volumes needed; this container exits once the topic is created
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:       ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  superset:
+    image: apache/superset:latest
+    ports:
+      - "8088:8088"
+    environment:
+      SUPERSET_SECRET_KEY:   ${SUPERSET_SECRET_KEY}
+      ADMIN_USERNAME:        ${SUPERSET_ADMIN_USER}
+      ADMIN_PASSWORD:        ${SUPERSET_ADMIN_PASSWORD}
+      ADMIN_EMAIL:           ${SUPERSET_ADMIN_EMAIL}
+    depends_on:
+      - postgres
+
+  sim_broker:
+    build: ../sim_broker
+    command: python main.py
+    environment:
+      REDPANDA_BROKER: redpanda:9092
+      HEARTBEAT_TOPIC:  heartbeat
+    volumes:
+      - ../lake:/lake
+    depends_on:
+      - redpanda
+      - topic_init
+
+  bytewax:
+    build: ../bytewax
+    command: python flows/heartbeat_flow.py
+    environment:
+      REDPANDA_BROKER: redpanda:9092
+      HEARTBEAT_TOPIC:  heartbeat
+    volumes:
+      - ../lake:/lake
+    depends_on:
+      - redpanda
+      - topic_init

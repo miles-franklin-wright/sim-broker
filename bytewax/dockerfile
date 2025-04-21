@@ -1,0 +1,6 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY . .
+# include Kafka connector dependencies
+RUN pip install bytewax[kafka] kafka-python
+CMD ["python", "flows/heartbeat_flow.py"]

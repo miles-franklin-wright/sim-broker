@@ -2,3 +2,5 @@
 # Python build artifacts
 __pycache__/
 *.py[cod]
+
+guide.md

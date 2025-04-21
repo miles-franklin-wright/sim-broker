@@ -1,0 +1,32 @@
+[0m15:26:58.380020 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd1491ad700>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd14b11fec0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd1491ac0e0>]}
+
+
+============================== 15:26:58.382226 | 687dbb92-b845-465c-8fd2-f7bf9d903a56 ==============================
+[0m15:26:58.382226 [info ] [MainThread]: Running with dbt=1.9.4
+[0m15:26:58.382528 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/home/miles-franklin-wright/.dbt', 'fail_fast': 'False', 'version_check': 'True', 'log_path': 'logs', 'debug': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt init sim_broker', 'log_format': 'default', 'introspect': 'True', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m15:26:58.391651 [warn ] [MainThread]: [ConfigFolderDirectory]: Unable to parse logging event dictionary. Failed to parse dir field: expected string or bytes-like object, got 'PosixPath'.. Dictionary: {'dir': PosixPath('/home/miles-franklin-wright/.dbt')}
+[0m15:26:58.392067 [info ] [MainThread]: Creating dbt configuration folder at 
+[0m15:26:58.393082 [debug] [MainThread]: Starter project path: /home/miles-franklin-wright/.local/share/pipx/venvs/dbt-core/lib/python3.12/site-packages/dbt/include/starter_project
+[0m15:26:58.396859 [info ] [MainThread]: 
+Your new dbt project "sim_broker" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m15:26:58.397079 [info ] [MainThread]: Setting up your profile.
+[0m15:27:46.435471 [info ] [MainThread]: Profile sim_broker written to /home/miles-franklin-wright/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m15:27:46.454826 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 46.56408, "process_in_blocks": "1480", "process_kernel_time": 0.061585, "process_mem_max_rss": "114624", "process_out_blocks": "80", "process_user_time": 0.718501}
+[0m15:27:46.455185 [debug] [MainThread]: Command `dbt init` succeeded at 15:27:46.455118 after 46.56 seconds
+[0m15:27:46.455389 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd14958f950>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd148ddf230>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fd148ddeae0>]}
+[0m15:27:46.455597 [debug] [MainThread]: Flushing usage events
+[0m15:27:46.581553 [debug] [MainThread]: An error was encountered while trying to flush usage events
