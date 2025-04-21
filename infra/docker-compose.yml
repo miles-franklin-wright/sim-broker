@@ -4,19 +4,23 @@ services:
   redpanda:
     image: redpandadata/redpanda:latest
     ports:
-      - "9092:9092"
-      - "9644:9644"
+      - "9092:9092"     # internal Docker clients
+      - "29092:29092"   # external (host machine)
+      - "9644:9644"     # admin API
     command:
       - redpanda
       - start
       - --overprovisioned
-      - --smp 1
-      - --memory 1G
-      - --reserve-memory 0M
-      - --node-id 0
+      - --smp=1
+      - --memory=1G
+      - --reserve-memory=0M
+      - --node-id=0
       - --check=false
+      - --kafka-addr=internal://0.0.0.0:9092,external://0.0.0.0:29092
+      - --advertise-kafka-addr=internal://redpanda:9092,external://localhost:29092
     volumes:
       - ../lake:/lake
+
 
   # optional: ensure heartbeat topic exists before producers/consumers start
   topic_init:
@@ -26,12 +30,12 @@ services:
       - sh
       - -c
       - |
-        # wait for broker to be up
-        until rpk cluster health --brokers redpanda:9092; do
+        # wait until metadata is available
+        until rpk cluster metadata --brokers redpanda:9092; do
           echo "waiting for redpanda…"; sleep 1
         done
         rpk topic create heartbeat --brokers redpanda:9092 || true
-    # no ports or volumes needed; this container exits once the topic is created
+
 
   postgres:
     image: postgres:15
@@ -71,7 +75,7 @@ services:
 
   bytewax:
     build: ../bytewax
-    command: python flows/heartbeat_flow.py
+    command: python -m bytewax.run flows.heartbeat_flow:build_flow
     environment:
       REDPANDA_BROKER: redpanda:9092
       HEARTBEAT_TOPIC:  heartbeat
