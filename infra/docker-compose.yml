@@ -77,10 +77,14 @@ services:
     build: ../bytewax
     command: python -m bytewax.run flows.heartbeat_flow:build_flow
     environment:
-      REDPANDA_BROKER: redpanda:9092
-      HEARTBEAT_TOPIC:  heartbeat
+    - REDPANDA_BROKER=redpanda:9092
+    - HEARTBEAT_TOPIC=heartbeat
+    - BRONZE_PATH=/lake/bronze/heartbeat.jsonl
+    - SILVER_PATH=/lake/silver/heartbeat
+    - BATCH_SIZE=100
     volumes:
       - ../lake:/lake
     depends_on:
       - redpanda
       - topic_init
+
