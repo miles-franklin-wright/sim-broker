@@ -73,18 +73,54 @@ services:
       - redpanda
       - topic_init
 
-  bytewax:
+  bytewax-bronze:
     build: ../bytewax
-    command: python -m bytewax.run flows.heartbeat_flow:build_flow
+    container_name: bytewax-bronze
+    # No need to specify python or -m here, the ENTRYPOINT covers that
+    command: ["flows.heartbeat_flow:build_flow"]
     environment:
-    - REDPANDA_BROKER=redpanda:9092
-    - HEARTBEAT_TOPIC=heartbeat
-    - BRONZE_PATH=/lake/bronze/heartbeat.jsonl
-    - SILVER_PATH=/lake/silver/heartbeat
-    - BATCH_SIZE=100
+      - REDPANDA_BROKER=redpanda:9092
+      - HEARTBEAT_TOPIC=heartbeat
+      - BRONZE_PATH=/lake/bronze/heartbeat.jsonl
     volumes:
       - ../lake:/lake
     depends_on:
       - redpanda
       - topic_init
 
+  bytewax-silver:
+    build: ../bytewax
+    container_name: bytewax-silver
+    # Again, only the import string
+    command: ["flows.silver_heartbeat_flow:build_flow"]
+    environment:
+      - BRONZE_PATH=/lake/bronze/heartbeat.jsonl
+      - SILVER_PATH=/lake/silver/heartbeat
+      - BATCH_SIZE=100
+    volumes:
+      - ../lake:/lake
+    depends_on:
+      - bytewax-bronze
+
+  compactor:
+    image: python:3.12-slim
+    container_name: compactor
+    # mount both your lake data and your infra scripts
+    volumes:
+      - ../lake:/lake
+      - ./compactor.py:/app/infra/compactor.py
+      - ./__init__.py:/app/infra/__init__.py
+    working_dir: /app/infra
+    environment:
+      - SILVER_PATH=/lake/silver/heartbeat
+      - COMPACTION_INTERVAL_HOURS=1   # optional—defaults to 1 hour
+    # run once immediately, then every hour
+    command: >
+      sh -c "
+        python compactor.py;
+        while sleep 3600; do
+          python compactor.py;
+        done
+      "
+    depends_on:
+      - bytewax-silver

@@ -30,6 +30,7 @@ def build_flow() -> Dataflow:
     # Step 2: Parse & Enrich each record
     def parse_and_enrich(line: str) -> dict:
         record = json.loads(line)
+        print(f"Read line: {line}")
         ts = datetime.fromtimestamp(record.get("timestamp"))
         return {
             "timestamp": ts,
@@ -54,5 +55,7 @@ def build_flow() -> Dataflow:
         return []  # flat_map expects iterable return
 
     op.flat_map("write", enriched, write_and_passthrough)
+
+    op.inspect("noop_inspect", enriched, lambda record: None)
 
     return flow
