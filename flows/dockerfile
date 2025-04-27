@@ -1,0 +1,30 @@
+# flows/Dockerfile
+
+FROM python:3.12-slim
+
+# Install build and runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        librdkafka-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory and PYTHONPATH
+WORKDIR /app
+ENV PYTHONPATH=/app
+
+# Copy only the flows package (your Bytewax flow code)
+COPY . /app/flows
+
+# Install Python runtime dependencies
+RUN pip install --no-cache-dir \
+        bytewax \
+        pyarrow \
+        confluent-kafka
+
+# Use Bytewax's CLI runner
+ENTRYPOINT ["python", "-m", "bytewax.run"]
+
+# Default command: bronze heartbeat flow (override in Compose for silver)
+CMD ["--workers-per-process", "1", "flows.heartbeat_flow:build_flow()"]
+
