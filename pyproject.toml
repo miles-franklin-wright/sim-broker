@@ -16,6 +16,7 @@ dependencies = [
     "pyarrow (>=19.0.1,<20.0.0)",
     "fsspec (>=2025.3.2,<2026.0.0)",
     "bytewax (>=0.21.1,<0.22.0)",
+    "psycopg2-binary",         
 ]
 
 
@@ -36,3 +37,6 @@ norecursedirs = [
   "pgdata",
   "sim_broker.egg-info",
 ]
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+

@@ -2,3 +2,9 @@ numpy
 pandas
 pydantic
 rich
+PyYAML
+kafka-python<3.0.0,>=2.1.5
+pyarrow<20.0.0,>=19.0.1
+fsspec<2026.0.0,>=2025.3.2
+bytewax<0.22.0,>=0.21.1
+psycopg2-binary

@@ -103,3 +103,17 @@ services:
       - --workers-per-process
       - "1"
       - flows.silver_heartbeat_flow:build_flow()
+
+  parquet-loader:
+    build:
+      context: ..            # project root
+      dockerfile: Dockerfile
+    image: sim-broker-loader
+    command: poetry run python loader/load_parquet.py
+    environment:
+      DB_DSN:     "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+      PARQUET_PATH: "/lake/silver/heartbeat/heartbeat.parquet"
+    volumes:
+      - ../lake:/lake
+    depends_on:
+      - postgres
